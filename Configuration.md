@@ -13,13 +13,6 @@ host = "localhost"
 disable = false
 port = 8080
 
-[db]
-username = "xud"
-password = ""
-database = "xud"
-port = 3306
-host = "localhost"
-
 [p2p]
 listen = true
 port = 8885 # The port to listen for incoming peer connections when listen = true
