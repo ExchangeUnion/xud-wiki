@@ -1,6 +1,6 @@
 # Configuration
 
-An *optional* configuration file uses [TOML](https://github.com/toml-lang/toml) and by default should be saved at  `~/.xud/xud.conf` on Linux or `AppData\Local\Xud\xud.conf` on Windows (run `xud` at least once for this folder to be created). Options with default values are shown below.
+An *optional* configuration file uses [TOML](https://github.com/toml-lang/toml) and by default should be saved at  `~/.xud/xud.conf` on Linux or `AppData\Local\Xud\xud.conf` on Windows (run `xud` at least once for this folder to be created). An always up-to-date `sample-xud.conf` can be found in the root folder of `xud` after installation which serves as template for creating `xud.conf`. Some of the configuration options are as follows:
 
 ```toml
 initDb = true # Whether to initalize a new database with default values
