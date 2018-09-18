@@ -1,5 +1,3 @@
-# Developer Guide
-
 This page is intended to help developers who want to work on `xud`.
 
 ## Contribution Guidelines
