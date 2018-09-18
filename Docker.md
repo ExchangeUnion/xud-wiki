@@ -1,5 +1,3 @@
-# Docker
-
 This page contains `xud` setup instructions for exchange admins and technical users utilizing Docker.
 
 We use `docker-compose` to package `xud`, `lnd`, `btcd`, `ltcd`, `raiden` & `geth` together to make deploying these services as easy as typing a few commands. All configuration between `xud` and other containers are handled automatically by their `docker-compose` config file.
