@@ -1,5 +1,3 @@
-# Running `xud`
-
 `xud` can be launched via `npm start` or the `xud` executable in the `bin` folder. If `xud` is installed globally, it can be launched from any directory.
 
 Use `xud --help` to get up-to-date, optional command line arguments to override defaults and settings in the [configuration](https://github.com/ExchangeUnion/xud/wiki/Configuration) file for a specific `xud` instance.
