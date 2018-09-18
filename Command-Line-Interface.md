@@ -1,4 +1,3 @@
-# Command Line Interface
 `xucli` is a command line tool that handles much of the basic interaction with a running `xud` instance. If `xud` is installed globally, it can be launched from any directory.
 
 ```
