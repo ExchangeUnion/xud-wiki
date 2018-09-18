@@ -1,5 +1,3 @@
-# Installation
-
 This page contains detailed instructions on installing `xud`. Instructions for installing via Docker can be found [here](https://github.com/ExchangeUnion/xud/wiki/Docker).
 
 ## Requirements
