@@ -15,6 +15,7 @@ The following development environments are known to be compatible with `xud` and
 [Visual Studio Code](https://code.visualstudio.com/) is a cross-platform code editor that's compatible with most popular programming languages and extensible via a large collection of plug-ins. Consider using the following plugins for working with `xud`.
 
 - [TSLint](https://marketplace.visualstudio.com/items?itemName=eg2.tslint)
+- [vscode-proto3](https://marketplace.visualstudio.com/items?itemName=zxh404.vscode-proto3)
 - [Bracket Pair Colorizer](https://marketplace.visualstudio.com/items?itemName=coenraads.bracket-pair-colorizer)
 
 ## Recommended Reading
