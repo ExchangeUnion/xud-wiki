@@ -40,8 +40,6 @@ This should create the xud-simnet directory under your home directory.
 
 ### Setup ~/.bashrc
 To enable access to the scripts please update and source your `.bashrc`:
-
-Add ~/xud-simnet/setup.bash to .bashrc
 ```
 source ~/xud-simnet/setup.bash
 source ~/.bashrc
@@ -55,42 +53,32 @@ xud-simnet-check
 ```
 
 ### Installation
-Install all needed packages with
+Install all components with
 ```
 xud-simnet-install
 ```
-The errors during installation can be ignored as long as execution ends in
-> xud@1.0.0-alpha.1 compile /home/offerm/xud-simnet/xud
-> cross-os precompile && tsc && cross-os postcompile
+It could take several minutes depending on the speed of your machine & connection until you see `Ready!`.
 
 ### Starting
 You can start all components with
 ```
 xud-simnet-start
 ```
-Starting is very fast and the prompt should return immediately. All processes are running in the background.
+Since `btcd` and `ltcd` need to sync the blocks of the XUD simulation network when started for the first time, it could take a minute or two until you see `Ready!`.
 
-First startup can take some seconds or even minutes since `btcd` and `ltcd` need to sync the blocks of the XUD simulation network. You can check the status with 
+### Payment Channels
+To setup payment channels run
 ```
-lndbtc-lncli getinfo
+xud-simnet-channels
 ```
-and
-```
-lndltc-lncli getinfo
-```
-in both cases you should wait until you see 
->  "synced_to_chain": true,
+Payment channels are used to instantly settle trades via cross chain atomic swaps with peers. It should take about 10 minutes for your payment channels to be ready. The XUD Simulation Network features one minute block times and we could speed this up arbitrarily, but later on mainnet this will involve an even more significant waiting time. We decided to keep it close to reality without being to annoyingly long.
 
-Don't progress with this guide until both chains are synced.
-
-Hint: If the above `getinfo` commands show errors, try restarting the Simulation Network by running `xud-simnet-stop` followed by `xud-simnet-start`.
-
-Once `ltcd` and `btcd` are synced, check `xud`'s status with
-
+### Final check
+Once you see `Xud system is ready!`, run
 ```
 xucli getinfo
 ```
-you should see something similar to
+and you should see something similar to
 ```
 {
   "version": "1.0.0-alpha.1",
@@ -105,7 +93,7 @@ you should see something similar to
   "lndbtc": {
     "error": "",
     "channels": {
-      "active": 0,
+      "active": 1,
       "inactive": 0,
       "pending": 0
     },
@@ -120,7 +108,7 @@ you should see something similar to
   "lndltc": {
     "error": "",
     "channels": {
-      "active": 0,
+      "active": 1,
       "inactive": 0,
       "pending": 0
     },
@@ -135,48 +123,7 @@ you should see something similar to
 }
 ```
 
-### Payment Channels
-To setup payment channels (which are needed for cross atomic swaps) run
-```
-xud-simnet-channels
-```
-
-2 channels should be created 
-```
-open channel with 030c2ffd29a92e2dd2fb6fb046b0d9157e0eda8b11caa0e439d0dd6a46a444381c@xud3.test.exchangeunion.com
-{
-}
-open channel with 02f5e0324909bdb635d4d6a50aa07c517db59f5d18219fd058f9faa3ef3a1fd83a@xud3.test.exchangeunion.com
-{
-}
-```
-
-The error message `Error: 6 ALREADY_EXISTS:` can be ignored.
-
-Now you have to wait now until these channels become active.
-use
-```
-xucli getinfo
-```
-to see the channel from initially "pending" becoming "active".
-
-Please note that this can take 6-10 minutes (we configured 1 min block times in our XUD Simulation Network)
-
-```
-  "lndbtc": {
-    "error": "",
-    "channels": {
-      "active": 1,
-```
-and
-```
-  "lndltc": {
-    "error": "",
-    "channels": {
-      "active": 1,
-```
-
-Once you see an active channel for both `lndbtc` and `lndltc`, you are ready to trade. Let's do some test trades!
+with one active channel for both, `lndbtc` and `lndltc`. If so, you are finally ready to rumble. Yay - let's do some test trades!
 
 ### Trading
 `xud` is now connected to the simulation network which includes three permanent nodes operated by Exchange Union. You can view these by running
