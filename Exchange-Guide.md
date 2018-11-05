@@ -19,6 +19,7 @@ Make sure you have the below programs installed:
 - [git](https://gist.github.com/derhuerst/1b15ff4652a867391f03#file-linux-)
 - [make](https://www.cyberciti.biz/faq/debian-linux-install-gnu-gcc-compiler/)
 - [node.js + npm](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
+- python2.7 (preinstalled on most systems, check with `python --version`)
 - killall (`sudo apt-get install psmisc`)
 
 ### Installing GO
