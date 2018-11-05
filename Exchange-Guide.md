@@ -1,12 +1,12 @@
 # Exchange Guide (WIP)
 
 ## Goal
-This guide describes how to setup `xud` with an existing exchange system and how to connect to the "XUD Simulation Network". `xud` is in alpha stage and the simulation network aims to give exchange operators a 'feel' of how things will work. `xud` in it's current stage should never be connected to a production system nor be used on mainnet. You'll be using test coins at all times. This guide purpusely is kept relatively manual to make it understandable how `xud` works. In parallel we are working on improved automated setup using docker.
+This guide describes how to setup `xud` with an existing exchange system and how to connect to the XUD Simulation Network or `xud-simnet`. `xud` is in alpha stage and the simnet aims to give exchange operators a 'feel' of how things will work. `xud` in it's current stage should never be connected to a production system nor be used on mainnet. You'll be using test coins at all times. This guide purpusely is kept relatively manual to make it understandable how `xud` works. In parallel we are working on improved automated setup using docker.
 
-Once the setup is completed, you will be able to query pending orders, place orders, and experiment with `xud`'s rich set of commands. Once a match is found in the network, your orders will be executed via a cross-chain atomic swap. The XUD simulation network currently supports atomic swaps between BTC and LTC. This guide will show how to to install GO, bitcoin and litecoin daemons, setup Lightning daemons (LND) for bitcoin (BTC) and litecoin (LTC), setup `xud` and basic instructions of how to integrate its API and finally connect to the simulation network. This guide is written for Linux & MacOS operating systems and geared towards IT administrators of exchanges.
+Once the setup is completed, you will be able to query pending orders, place orders, and experiment with `xud`'s rich set of commands. Once a match is found in the network, your orders will be executed via a cross-chain atomic swap. `xud-simnet` currently supports atomic swaps between BTC and LTC. This guide will show how to to install GO, bitcoin and litecoin daemons, setup Lightning daemons (LND) for bitcoin (BTC) and litecoin (LTC), setup `xud` and basic instructions of how to integrate its API and finally connect to `xud-simnet`. This guide is written for Linux & MacOS operating systems and geared towards IT administrators of exchanges.
 
 ## Describing the Setup
-To connect to the XUD simulation network you'll need to run several components which together provide support for exchanging order information and atomic swaps between BTC and LTC on the lightning network. You will setup the following components:
+To connect to `xud-simnet` you'll need to run several components which together provide support for exchanging order information and atomic swaps between BTC and LTC on the lightning network. You will setup the following components:
 - `BTCD` - full node, connected to the BTC chain
 - `LTCD` - full node, connected to the LTC chain
 - `LND-BTC` - lightning network daemon for the BTC network
@@ -36,7 +36,7 @@ From your home directory run
 ```
 git clone https://github.com/ExchangeUnion/xud-simnet.git
 ```
-This should create the xud-simnet directory under your home directory.
+This should create the `xud-simnet` directory under your home directory.
 
 ### Setup ~/.bashrc
 To enable access to the scripts please update and source your `.bashrc`:
@@ -64,14 +64,14 @@ You can start all components with
 ```
 xud-simnet-start
 ```
-Since `btcd` and `ltcd` need to sync the blocks of the XUD simulation network when started for the first time, it could take a minute or two until you see `Ready!`.
+Since `btcd` and `ltcd` need to sync the blocks of the XUD simnet when started for the first time, it could take a minute or two until you see `Ready!`.
 
 ### Payment Channels
 To setup payment channels run
 ```
 xud-simnet-channels
 ```
-Payment channels are used to instantly settle trades via cross chain atomic swaps with peers. It should take about 10 minutes for your payment channels to be ready. The XUD Simulation Network features one minute block times and we could speed this up arbitrarily, but later on mainnet this will involve an even more significant waiting time. We decided to keep it close to reality without being to annoyingly long.
+Payment channels are used to instantly settle trades via cross chain atomic swaps with peers. It should take about 10 minutes for your payment channels to be ready. The `xud-simnet` features one minute block times and we could speed this up arbitrarily, but later on mainnet this will involve an even more significant waiting time. We decided to keep it close to reality without being to annoyingly long.
 
 ### Final check
 Once you see `Xud system is ready!`, run
@@ -126,7 +126,7 @@ and you should see something similar to
 with one active channel for both, `lndbtc` and `lndltc`. If so, you are finally ready to rumble. Yay - let's do some test trades!
 
 ### Trading
-`xud` is now connected to the simulation network which includes three permanent nodes operated by Exchange Union. You can view these by running
+`xud` is now connected to `xud-simnet` which includes three permanent nodes operated by Exchange Union. You can view these by running
 ```
 xucli listpeers
 ```
@@ -145,7 +145,7 @@ You already received existing orders from the network. You can view these with
 ```
 xucli getorders LTC/BTC
 ```
-Let's execute a test order to trigger a match and execution via atomic swap by e.g. buying 0.0005 bitcoin with litecoin
+Let's execute a test order to trigger a match and execution via atomic swap by e.g. buying 0.0005 litecoin with bitcoin
 ```
 xucli buy 0.0005 LTC/BTC 1.13
 ```
@@ -173,7 +173,17 @@ In `nomatching` mode, which can be enabled via [xud.conf](https://github.com/Exc
 * `executeSwap` executes an atomic swap in a matter of with a remote peer. You can continue using your internal `orderID`s, `xud` takes care of mapping such with `orderID`s in the network. The swap might take up to several seconds to complete.
 * `subscribeSwaps` informs about successful/failed swaps with other peers in an event stream, use this call to determine when to remove an order from your internal order book.
 
+### Upgrade
+To upgrade your existing `xud-simnet` setup with active channels run
+```
+xud-simnet-stop
+cd ~/xud-simnet
+git fetch
+git pull
+xud-simnet-start
+xucli getinfo
+```
 ### Help us to improve!
-`xud` is in alpha stage, as well as this guide. Please help us to improve by opening issues for [xud](https://github.com/ExchangeUnion/xud/issues) and the [simulation network](https://github.com/ExchangeUnion/xud-simnet/issues).
+`xud` is in alpha stage, as well as this guide. Please help us to improve by opening issues for [xud](https://github.com/ExchangeUnion/xud/issues) and the [simnet](https://github.com/ExchangeUnion/xud-simnet/issues).
 
 Feel like talking? Chat with us in our [Gitter channel](https://gitter.im/exchangeunion/xud-testing)!
