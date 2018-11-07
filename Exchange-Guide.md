@@ -51,12 +51,6 @@ source ~/.bashrc
 ```
 to make the changes permanent.
 
-### Verify Setup
-Before you move on lets verify that we are ready:
-```
-xud-simnet-check
-```
-
 ### Installation
 Install all components with
 ```
