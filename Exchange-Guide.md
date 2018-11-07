@@ -47,6 +47,7 @@ source ~/.bashrc
 Please note that the `setup.bash` script set your `$GOPATH` to `~/xud-simnet/go`. All changes from `setup.bash`are temporary and only active for the current terminal session. You can run
 ```
 echo "source ~/xud-simnet/setup.bash" >> ~/.bashrc
+source ~/.bashrc
 ```
 to make the changes permanent.
 
