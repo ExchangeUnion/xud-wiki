@@ -16,14 +16,14 @@ To connect to `xud-simnet` you'll need to run several components which together 
 ## Installation 
 ### Prerequisites
 Make sure you have the below programs installed:
-- [git](https://gist.github.com/derhuerst/1b15ff4652a867391f03#file-linux-)
+- [git](https://gist.github.com/derhuerst/1b15ff4652a867391f03#file-linux-md)
 - [make](https://www.cyberciti.biz/faq/debian-linux-install-gnu-gcc-compiler/)
 - [node.js + npm](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
 - python2.7 (preinstalled on most systems, check with `python --version`)
 - killall (`sudo apt-get install psmisc`)
 
 ### Installing GO
-if GO is not yet installed on your system please use the following command to install it:
+If GO is not yet installed on your system please use the following command to install it:
 ```
 sudo apt-get install golang-1.10-go
 ```
@@ -33,9 +33,8 @@ sudo ln -s /usr/lib/go-1.10/bin/go /usr/local/bin/go
 ```
 
 ### Repository Checkout
-From your home directory run
 ```
-git clone https://github.com/ExchangeUnion/xud-simnet.git
+git clone https://github.com/ExchangeUnion/xud-simnet.git ~/xud-simnet
 ```
 This should create the `xud-simnet` directory under your home directory.
 
@@ -45,7 +44,11 @@ To enable access to the scripts please update and source your `.bashrc`:
 source ~/xud-simnet/setup.bash
 source ~/.bashrc
 ```
-Please note that the `setup.bash` script set your `$GOPATH` to `~/xud-simnet/go`. All changes from `setup.bash`are temporary and only active for the current terminal session. You need to repeat the sourcing above or add things to `PATH` to make these permanent.
+Please note that the `setup.bash` script set your `$GOPATH` to `~/xud-simnet/go`. All changes from `setup.bash`are temporary and only active for the current terminal session. You can run
+```
+echo "source ~/xud-simnet/setup.bash" >> ~/.bashrc
+```
+to make the changes permanent.
 
 ### Verify Setup
 Before you move on lets verify that we are ready:
@@ -65,14 +68,14 @@ You can start all components with
 ```
 xud-simnet-start
 ```
-Since `btcd` and `ltcd` need to sync the blocks of the XUD simnet when started for the first time, it could take a minute or two until you see `Ready!`.
+Since `btcd` and `ltcd` need to sync the blocks of the XUD simnet when started for the first time, it could take a minute or two until you see `Ready!`. Gracefully stop the environment with `xud-simnet-stop`.
 
 ### Payment Channels
 To setup payment channels run
 ```
 xud-simnet-channels
 ```
-Payment channels are used to instantly settle trades via cross chain atomic swaps with peers. It should take about 10 minutes for your payment channels to be ready. The `xud-simnet` features one minute block times and we could speed this up arbitrarily, but later on mainnet this will involve an even more significant waiting time. We decided to keep it close to reality without being to annoyingly long.
+Payment channels are used to instantly settle trades via cross chain atomic swaps with peers. It should take 5-10 minutes for your payment channels to be ready. The `xud-simnet` features one minute block times and we could speed this up arbitrarily, but later on mainnet this will involve an even more significant waiting time. We decided to keep it close to reality without being to annoyingly long.
 
 ### Final check
 Once you see `Xud system is ready!`, run
