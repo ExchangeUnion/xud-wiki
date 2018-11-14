@@ -15,6 +15,9 @@ To install these on e.g. Ubuntu, check the [official docker install instructions
 
 ```bash
 git clone https://github.com/ExchangeUnion/xud
+cd xud
+npm install
+npm run compile
 ```
 
 ## 3. Run
