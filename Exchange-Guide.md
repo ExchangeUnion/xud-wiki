@@ -1,9 +1,9 @@
 # Exchange Guide (WIP)
 
 ## Goal
-This guide describes how to setup `xud` with an existing exchange system and how to connect to the XUD Simulation Network or `xud-simnet`. `xud` is in alpha stage and the simnet aims to give exchange operators a 'feel' of how things will work. `xud` in it's current stage should never be connected to a production system nor be used on mainnet. You'll be using test coins at all times. This guide purpusely is kept relatively manual to make it understandable how `xud` works. In parallel we are working on improved automated setup using docker.
+This guide describes how to setup `xud` with an existing exchange system and how to connect to the XUD Simulation Network, `xud-simnet` for short and do some test trades. `xud` is in alpha stage and the `xud-simnet` aims to give exchange operators a 'feel' of how things will work. `xud` in it's current stage should never be connected to a production system nor be used on mainnet. You'll be using test coins at all times. This guide purposely is kept relatively manual to make it understandable how `xud` functions. We are working on an improved setup using docker, which will also be the preferred way to use `xud` for exchanges in production.
 
-Once the setup is completed, you will be able to query pending orders, place orders, and experiment with `xud`'s rich set of commands. Once a match is found in the network, your orders will be executed via a cross-chain atomic swap. `xud-simnet` currently supports atomic swaps between BTC and LTC. This guide will show how to to install GO, bitcoin and litecoin daemons, setup Lightning daemons (LND) for bitcoin (BTC) and litecoin (LTC), setup `xud` and basic instructions of how to integrate its API and finally connect to `xud-simnet`. This guide is written for Linux & MacOS operating systems and geared towards IT administrators of exchanges.
+Once the setup of `xud-simnet` is completed, you will be able to query pending orders, place orders, and experiment with `xud`'s rich set of commands. Once a match is found in the network, your orders will be executed via cross-chain atomic swaps. `xud-simnet` currently supports atomic swaps between BTC and LTC. This guide will show how to to install GO, bitcoin and litecoin daemons, setup lightning daemons (LND) for bitcoin (BTC) and litecoin (LTC), setup `xud` and basic instructions of how to integrate its API and finally connect to the `xud-simnet`. This guide is written for Linux & MacOS operating systems and geared towards IT administrators of exchanges.
 
 ## Describing the Setup
 To connect to `xud-simnet` you'll need to run several components which together provide support for exchanging order information and atomic swaps between BTC and LTC on the lightning network. You will setup the following components:
@@ -49,14 +49,14 @@ Please note that the `setup.bash` script set your `$GOPATH` to `~/xud-simnet/go`
 echo "source ~/xud-simnet/setup.bash" >> ~/.bashrc
 source ~/.bashrc
 ```
-to make the changes permanent.
+to make these changes permanent.
 
 ### Installation
 Install all components with
 ```
 xud-simnet-install
 ```
-It could take several minutes depending on the speed of your machine & connection until you see `Ready!`.
+It could take several minutes, depending on the speed of your machine & connection, until you see `Ready!`.
 
 ### Starting
 You can start all components with
@@ -148,9 +148,10 @@ Let's execute a test order to trigger a match and execution via atomic swap by e
 ```
 xucli buy 0.0005 LTC/BTC 1.13
 ```
-which should result in
+which should result in sth. like this:
 ```
-**TODO**
+matched 0.0001 BTC @ 1.13 with order da8d3401-e75a-11e8-972d-a9036be5a943
+No more matches found
 ```
 
 Currently the trading bots of xud1, 2 & 3 are configured to simply replace successfully filled and swapped orders. A more realistic, market dynamic behavior will be deployed soon.
@@ -162,15 +163,18 @@ From a high-level perspective, `xud` supports two modes:
 1. `matching`
 2. `nomatching`
 
-Default is `matching` mode, which means that `xud` acts as order book & matching engine for all of your orders. Choose this mode if your exchange is not live yet, comparably small or you simply want to rather rely on the battle-tested matching engine of `xud` instead of using your own. You will need to change your current system in a way to *forward* orders to and listen to order events from `xud`. The following API calls are relevant:
-* `placeOrder` use this to forward an order to `xud`, e.g. triggered by a user of your platform. You can choose the sync version, which returns the final result in the call, which can take some seconds if a swap with a remote peer is involved. The async version updates with events in the course of the trade. Currently buy/sell as market/limit order are supported. 
-* `cancelOrder` cancel an order previously placed via `placeOrder`, e.g. triggered by a user of your platform
-* `getOrders` use this to e.g. display order information in your front-end
+Default is `matching` mode, which means that `xud` acts as order book & matching engine for all of your orders. Choose this mode if your exchange is not live yet, comparably small or you simply want to rather rely on the battle-tested matching engine of `xud` instead of using your own. You will need to design your exchange in a way to add orders to `xud`'s order book and listen to order events, in order to display real-time order information to your users and update user account balances. The following API calls are relevant:
+* `subscribeAddedOrders` this streaming call subscribes to orders being added to the order book. Together with `SubscribeRemovedOrders`, this allows the client to maintain an up-to-date view of the order book. Use this call to show a real-time order book to users via your exchange front-end and update account balances for your users.
+* `SubscribeRemovedOrders` this streaming call subscribes to orders being  removed - either in full or in part - from the order book. Together with `SubscribeAddedOrders`, this allows the client to maintain an up-to-date view of the order book. Use this call to show a real-time order book to users via your exchange front-end and update account balances for your users.
+* `placeOrder` use this to add an order to `xud`'s order book, which was triggered by a user of your platform. You can choose the sync version of the call, which only returns the final result. can take some seconds if a swap with a remote peer is involved. The async version updates with events in the course of the trade. Currently buy/sell as market/limit order are supported. 
+* `cancelOrder` cancel an order previously placed via `placeOrder`, which is triggered by a user of your platform.
 
-In `nomatching` mode, which can be enabled via [xud.conf](https://github.com/ExchangeUnion/xud/blob/master/sample-xud.conf), `xud` informs about orders from other peers and executes swaps with peers.
-* `subscribePeerOrders` informs about orders from other peers in an event stream, use this call to receive peerOrders from the network and include these in your internal order book & matching engine. You will need to adjust your matching engine to call *executeSwap* if a match is found for a specific `peerOrder`.
-* `executeSwap` executes an atomic swap in a matter of with a remote peer. You can continue using your internal `orderID`s, `xud` takes care of mapping such with `orderID`s in the network. The swap might take up to several seconds to complete.
-* `subscribeSwaps` informs about successful/failed swaps with other peers in an event stream, use this call to determine when to remove an order from your internal order book.
+
+`nomatching` mode, which can be enabled via [xud.conf](https://github.com/ExchangeUnion/xud/blob/master/sample-xud.conf), is designed for all order matching being handled by your existing matching engine and `xud` mainly a) informs about added & removed orders from other peers and b) executes swaps with peers when a match in your matching engine was found. The following API calls are relevant:
+* `subscribeAddedOrders` informs about new `peerOrder`s from other peers in an event stream. Use this call to include these `peerOrder`s in your internal order book & matching engine. Adjust your system to call `executeSwap`, if a match is found for a specific `peerOrder`.
+* `SubscribeRemovedOrders` informs about `peerOrder`s being removed - either in full or in part - in an event stream. Use this call to remove these `peerOrder`s from your internal order book & matching engine. These orders were invalidated by the peer and are no longer available for trading.
+* `executeSwap` executes an atomic swap for an order match with a remote peer. You can continue using your internal `orderID`s, `xud` takes care of mapping such with `orderID`s in the Exchange Union network. The swap might take up to several seconds to complete.
+* `subscribeSwaps` informs about successful/failed swaps with other peers in an event stream, use this call to get real-time notifications when `ownOrders` are filled by a remote taker. Use this call to track order executions, update balances, and inform traders when one of their orders was settled.
 
 ### Upgrade
 To upgrade your existing `xud-simnet` setup with active channels run
@@ -182,7 +186,9 @@ git pull
 xud-simnet-start
 xucli getinfo
 ```
-### Help us to improve!
-`xud` is in alpha stage, as well as this guide. Please help us to improve by opening issues for [xud](https://github.com/ExchangeUnion/xud/issues) and the [simnet](https://github.com/ExchangeUnion/xud-simnet/issues).
+If this doesn't work, `xud-simnet-stop`, `rm -rf xud-simnet` and install from scratch.
 
-Feel like talking? Chat with us in our [Gitter channel](https://gitter.im/exchangeunion/xud-testing)!
+### Help us to improve!
+`xud` is in alpha stage, as well as this guide. Please help us to improve by opening issues (or even better PRs) for [xud](https://github.com/ExchangeUnion/xud/issues), the [simnet](https://github.com/ExchangeUnion/xud-simnet/issues) and this [wiki](https://github.com/ExchangeUnion/xud-wiki/issues).
+
+Feel like talking? Chat with us on [Gitter](https://gitter.im/exchangeunion/xud-testing)!
