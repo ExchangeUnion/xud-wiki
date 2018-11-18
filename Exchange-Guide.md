@@ -168,13 +168,13 @@ Default is `matching` mode, which means that `xud` acts as order book & matching
 * `SubscribeRemovedOrders` this streaming call subscribes to orders being  removed - either in full or in part - from the order book. Together with `SubscribeAddedOrders`, this allows the client to maintain an up-to-date view of the order book. Use this call to show a real-time order book to users via your exchange front-end and update account balances for your users.
 * `placeOrder` use this to add an order to `xud`'s order book, which was triggered by a user of your platform. You can choose the sync version of the call, which only returns the final result. can take some seconds if a swap with a remote peer is involved. The async version updates with events in the course of the trade. Currently buy/sell as market/limit order are supported. 
 * `cancelOrder` cancel an order previously placed via `placeOrder`, which is triggered by a user of your platform.
-
+* `subscribeSwaps` informs about successful/failed swaps with other peers in an event stream, use this call to get real-time notifications when `ownOrders` are filled by a remote taker. Use this call to track order executions, update balances, and inform traders when one of their orders was settled.
 
 `nomatching` mode, which can be enabled via [xud.conf](https://github.com/ExchangeUnion/xud/blob/master/sample-xud.conf), is designed for all order matching being handled by your existing matching engine and `xud` mainly a) informs about added & removed orders from other peers and b) executes swaps with peers when a match in your matching engine was found. The following API calls are relevant:
 * `subscribeAddedOrders` informs about new `peerOrder`s from other peers in an event stream. Use this call to include these `peerOrder`s in your internal order book & matching engine. Adjust your system to call `executeSwap`, if a match is found for a specific `peerOrder`.
 * `SubscribeRemovedOrders` informs about `peerOrder`s being removed - either in full or in part - in an event stream. Use this call to remove these `peerOrder`s from your internal order book & matching engine. These orders were invalidated by the peer and are no longer available for trading.
 * `executeSwap` executes an atomic swap for an order match with a remote peer. You can continue using your internal `orderID`s, `xud` takes care of mapping such with `orderID`s in the Exchange Union network. The swap might take up to several seconds to complete.
-* `subscribeSwaps` informs about successful/failed swaps with other peers in an event stream, use this call to get real-time notifications when `ownOrders` are filled by a remote taker. Use this call to track order executions, update balances, and inform traders when one of their orders was settled.
+
 
 ### Upgrade
 To upgrade your existing `xud-simnet` setup with active channels run
