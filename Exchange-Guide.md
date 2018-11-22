@@ -197,7 +197,7 @@ Currently the trading bots of xud1, 2 & 3 are configured to simply replace succe
 
 ### API Integration
 
-`xud`'s gRPC API overview can be found [here](https://github.com/ExchangeUnion/xud/blob/master/proto/xudrpc.proto).
+`xud` uses [gRPC](https://grpc.io/). The latest overview of available calls with descriptions can be found in [this proto file](https://github.com/ExchangeUnion/xud/blob/master/proto/xudrpc.proto). Once the gRPC is more stable, we'll provide a nicer looking documentation.
 
 From a high-level perspective, `xud` supports two modes: `matching` and `nomatching`
 
