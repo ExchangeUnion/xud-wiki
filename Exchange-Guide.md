@@ -218,18 +218,7 @@ Default is `matching` mode, which means that `xud` acts as order book & matching
 
 ### Upgrade
 
-To upgrade your existing `xud-simnet` setup with active channels run
-
-```
-xud-simnet-stop
-cd ~/xud-simnet
-git fetch
-git pull
-xud-simnet-start
-xucli getinfo
-```
-
-If this doesn't work, `xud-simnet-stop`, `rm -rf xud-simnet` and install from scratch.
+`xud-simnet-start` automatically checks for updates and, if available, installs these and starts the simnet.
 
 ### Help us to improve!
 
