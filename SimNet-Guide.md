@@ -87,7 +87,11 @@ You can start all components with
 xud-simnet-start
 ```
 
-Since `btcd` and `ltcd` need to sync the blocks of the XUD simnet when started for the first time, it could take a minute or two until you see `Ready!`. Gracefully stop the environment with `xud-simnet-stop`.
+Since `btcd` and `ltcd` need to sync the blocks of the XUD simnet when started for the first time, it could take some time until you see `Ready!`. As long as you see the process advancing in the terminal, be patient and keep the process running.
+
+### Stopping
+
+Gracefully stop the environment with `xud-simnet-stop`.
 
 ### Payment Channels
 
@@ -97,7 +101,7 @@ To setup payment channels run
 xud-simnet-channels
 ```
 
-Payment channels are used to instantly settle trades via cross chain atomic swaps with peers. It should take 5-10 minutes for your payment channels to be ready. The `xud-simnet` features one minute block times and we could speed this up arbitrarily, but later on mainnet this will involve an even more significant waiting time. We decided to keep it close to reality without being too annoyingly long.
+Payment channels are used to instantly settle trades via cross chain atomic swaps with peers. It can take 10 minutes or more for your payment channels to be ready. The `xud-simnet` features one minute block times and we could speed this up arbitrarily, but later on mainnet this will involve an even more significant waiting time. We decided to keep it close to reality without being too annoyingly long.
 
 ### Final check
 
