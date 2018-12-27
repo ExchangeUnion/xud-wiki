@@ -2,7 +2,7 @@
 
 ## Goal
 
-This guide describes how to setup `xud` and connect to and trade on the XUD Simulation Network (`xud-simnet`). It should take less than 30 minutes to complete all steps.
+This guide describes how to setup `xud` and connect to and trade on the XUD Simulation Network (`xud-simnet`). It should take about 30 minutes to complete all steps.
 
 `xud` is in alpha stage and the `xud-simnet` aims to give exchange operators and testers an early 'look & feel' of how things will work. `xud` in it's current stage should never be connected to a production system or be configured for mainnet usage. The `xud-simnet` uses test coins at all times.
 
@@ -37,7 +37,7 @@ If Go is not yet installed on your system, use the following command to install 
 sudo apt-get install golang-1.10-go
 ```
 
-If Go is not included in your package manager, follow the official [install instructions](https://golang.org/doc/install). Note that `golang-1.10-go` puts binaries in `/usr/lib/go-1.10/bin`. If you want them on your PATH, you need to make that change yourself. Alternatively, you can create a softlink as follows:
+If Go is not included in your package manager, follow the official [install instructions](https://golang.org/doc/install). Note that `golang-1.10-go` puts binaries in `/usr/lib/go-1.10/bin`. If you want them on your PATH, you need to make that change yourself. Alternatively, you can create a softlink with
 
 ```
 sudo ln -s /usr/lib/go-1.10/bin/go /usr/local/bin/go 
@@ -183,10 +183,10 @@ The output of connected peers should contain
 You already received existing orders from the network. You can view these with
 
 ```
-xucli getorders LTC/BTC
+xucli listorders LTC/BTC
 ```
 
-Beware, [#709](https://github.com/ExchangeUnion/xud/pull/709) will rename this call to `listOrders`. For always up-to-date CLI commands check `xucli --help`. Let's execute a test order to trigger a match and execution via atomic swap by e.g. buying 0.0005 litecoin with bitcoin
+Let's execute a test order to trigger a match and execution via atomic swap by e.g. buying 0.0005 litecoin with bitcoin
 
 ```
 xucli buy 0.0005 LTC/BTC 1.13
@@ -215,6 +215,8 @@ xucli getinfo
 ```
 
 If this doesn't work, use `xud-simnet-stop`, `rm -rf xud-simnet` and install from scratch. This is only required for upgrades of the simnet environment itself. `xud-simnet-start` automatically checks for new versions of `xud` & `lnd` and installs them.
+
+For always up-to-date CLI commands check `xucli --help`. 
 
 Restart the simnet environment with `xud-simnet-restart`. If you want to control the underlying `lnd`,`btcd` or `ltcd` clients type `alias` to see aliases set by the `xud-simnet` scripts. to e.g. call `getInfo` for the BTC LND this would be `lndbtc-lncli getinfo`.
 
