@@ -2,7 +2,7 @@
 
 ## Goal
 
-This guide describes how to setup `xud` with an existing exchange system and testing it's trading functionalities with the `xud-simnet`.
+This guide describes how to setup `xud` with an existing exchange system and testing its trading functionalities with the `xud-simnet`.
 
 `xud` is in alpha stage and this guide aims to give exchange operators a 'feel' of how things will work. `xud` in it's current stage should never be connected to a production system or be configured for mainnet usage. The `xud-simnet` uses test coins at all times. We are working on an improved setup using docker, which will also be the preferred way to use `xud` for exchanges in production.
 
