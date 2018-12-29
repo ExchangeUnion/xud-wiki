@@ -186,35 +186,23 @@ You already received existing orders from the network. You can view these with
 xucli listorders LTC/BTC
 ```
 
-Let's execute a test order to trigger a match and execution via atomic swap by e.g. buying 0.0005 litecoin with bitcoin
+Let's execute a test order to trigger a match and execution via atomic swap by e.g. buying 0.5 litecoin with bitcoin
 
 ```
-xucli buy 0.0005 LTC/BTC 1.13
+xucli buy 0.5 LTC/BTC 0.0079
 ```
 
 which should result in sth. like
 
 ```
-matched 0.0001 BTC @ 1.13 with order da8d3401-e75a-11e8-972d-a9036be5a943
-No more matches found
+swapped 0.5 LTC with peer order c0de48a0-0b90-11e9-97c6-95f0014144a4
 ```
 
 Currently the trading bots of xud1, 2 & 3 are configured to simply replace successfully filled and swapped orders. A more realistic, market dynamic behavior will be deployed soon. In a recent upgrade, `xud-simnet` now features larger BTC and LTC lightning channels to support real-world order sizes.
 
-### Upgrade & useful commands
+### Updates & useful commands
 
-To upgrade your existing `xud-simnet` setup while keeping active channels run
-
-```
-xud-simnet-stop
-cd ~/xud-simnet
-git fetch
-git pull
-xud-simnet-start
-xucli getinfo
-```
-
-If this doesn't work, use `xud-simnet-stop`, `rm -rf xud-simnet` and install from scratch. This is only required for upgrades of the simnet environment itself. `xud-simnet-start` automatically checks for new versions of `xud` & `lnd` and installs them.
+`xud-simnet-start` automatically checks for updates and installs these. If an update fails or for any other unexpected errors, please [report the issue](https://github.com/ExchangeUnion/xud-simnet/issues) and use `xud-simnet-stop`, `xud-simnet-clean`, `rm -rf xud-simnet` and install from scratch.
 
 For always up-to-date CLI commands check `xucli --help`. 
 
