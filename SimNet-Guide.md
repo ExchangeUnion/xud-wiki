@@ -49,18 +49,18 @@ sudo ln -s /usr/lib/go-1.10/bin/go /usr/local/bin/go
 git clone https://github.com/ExchangeUnion/xud-simnet.git ~/xud-simnet
 ```
 
-This should create the `xud-simnet` directory under your home directory.
+This should create the `xud-simnet` directory in your home directory.
 
 ### Setup ~/.bashrc
 
 To enable access to the scripts please update and source your `.bashrc`:
 
 ```
-source ~/xud-simnet/setup.bash
 source ~/.bashrc
+source ~/xud-simnet/setup.bash
 ```
 
-Please note that the `setup.bash` script set your `$GOPATH` to `~/xud-simnet/go`. All changes from `setup.bash`are temporary and only active for the current terminal session. You can run
+Please note that the `setup.bash` script sets your `$GOPATH` to `~/xud-simnet/go`. All changes from `setup.bash` are temporary and only active for the current terminal session. You can run
 
 ```
 echo "source ~/xud-simnet/setup.bash" >> ~/.bashrc
@@ -206,7 +206,7 @@ Currently the trading bots of xud1, 2 & 3 are configured to simply replace succe
 
 For always up-to-date CLI commands check `xucli --help`. 
 
-Restart the simnet environment with `xud-simnet-restart`. If you want to control the underlying `lnd`,`btcd` or `ltcd` clients type `alias` to see aliases set by the `xud-simnet` scripts. to e.g. call `getInfo` for the BTC LND this would be `lndbtc-lncli getinfo`.
+Restart the simnet environment with `xud-simnet-restart`. If you want to control the underlying `lnd`, `btcd` or `ltcd` clients type `alias` to see aliases set by the `xud-simnet` scripts. to e.g. call `getinfo` for the BTC LND this would be `lndbtc-lncli getinfo`.
 
 ### Help us to improve!
 
