@@ -8,7 +8,7 @@ This guide describes how to setup `xud` with an existing exchange system and tes
 
 ### XUD SimNet
 
-Follow [this guide](SimNet-Guide.md) to set up the XUD SimNet. Once the setup of `xud-simnet` is completed, you will be able to query pending orders, place orders, and experiment with `xud`'s rich set of commands. This guide is written for Linux & MacOS operating systems and geared towards IT administrators of exchanges.
+Follow [this guide](SimNet-Guide) to set up the XUD SimNet. Once the setup of `xud-simnet` is completed, you will be able to query pending orders, place orders, and experiment with `xud`'s rich set of commands. This guide is written for Linux & MacOS operating systems and geared towards IT administrators of exchanges.
 
 
 ### API Integration
