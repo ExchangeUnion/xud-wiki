@@ -24,6 +24,11 @@ Consider using the following plugins for working with `xud`.
 
 Adding the two files from [this gist](https://gist.github.com/sangaman/117af412eefc28c4f763c0152ddd3b99) into a `.vscode` folder within the folder where you've cloned `xud` will automatically provide debug configurations and general settings that are helpful when developing `xud`. 
 
+## Documentation
+
+- [Code Documentation](http://typedoc.exchangeunion.com/)
+- [API Documentation](http://api.exchangeunion.com)
+
 ## Recommended Reading
 
 - [Official TypeScript Documentation](https://www.typescriptlang.org/docs/home.html)

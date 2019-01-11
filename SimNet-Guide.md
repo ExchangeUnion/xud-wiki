@@ -6,17 +6,19 @@ This guide describes how to setup `xud` and connect to and trade on the XUD Simu
 
 `xud` is in alpha stage and the `xud-simnet` aims to give exchange operators and testers an early 'look & feel' of how things will work. `xud` in it's current stage should never be connected to a production system or be configured for mainnet usage. The `xud-simnet` uses test coins at all times.
 
-Once the setup of `xud-simnet` is completed, you will be able to query pending orders, place orders, and experiment with `xud`'s rich set of commands. When a match is found in the network, your orders will automatically be executed via cross-chain atomic swaps. `xud-simnet` currently supports atomic swaps between BTC and LTC. This guide will show how to install dependencies like Go and how to use `xud-simnet` to automatically setup bitcoin and litecoin daemons, lightning daemons (LND) for bitcoin (BTC) and litecoin (LTC), `xud` and finally connect to the `xud-simnet`. This guide is written for Linux & MacOS and suitable for everyone that knows how to use a command line.
+Once the setup of `xud-simnet` is completed, you will be able to query pending orders, place orders, and experiment with `xud`'s rich set of commands. When a match is found in the network, your orders will automatically be executed via cross-chain atomic swaps. `xud-simnet` currently supports atomic swaps between BTC, LTC and ETH. This guide will show how to install dependencies like Go and how to use `xud-simnet` to automatically setup bitcoin, litecoin and ethereum daemons, lightning daemons (LND) for bitcoin (BTC) and litecoin (LTC), a raiden daemon for ethereum (ETH) `xud` and finally connect to the `xud-simnet`. This guide is written for Linux & MacOS and suitable for everyone that knows how to use a command line.
 
 ## Describing the Setup
 
-`xud-simnet` spins up several components on your machine which together provide support for exchanging order information and executing atomic swaps between BTC and LTC on the lightning network. It will setup the following components:
+`xud-simnet` spins up several components on your machine which together provide support for exchanging order information and executing instant atomic swaps between BTC, LTC & ETH. It will setup the following components:
 
-- `BTCD` - full node, connected to the BTC chain
-- `LTCD` - full node, connected to the LTC chain
-- `LND-BTC` - lightning network daemon for the BTC network
-- `LND-LTC` - lightning network daemon for the LTC network
-- `XUD` - Exchange Union's decentralized exchange layer
+- `btcd` - full node, connected to the BTC simnet chain
+- `ltcd` - full node, connected to the LTC simnet chain
+- `geth` - full node, connected to the ETH simnet chain
+- `lnd-btc` - lightning network daemon for BTC
+- `lnd-ltc` - lightning network daemon for LTC
+- `raiden` - raiden daemon for ETH
+- `xud` - Exchange Union's decentralized exchange layer
 
 ## Installation 
 
@@ -25,8 +27,9 @@ Once the setup of `xud-simnet` is completed, you will be able to query pending o
 Make sure you have the below programs installed:
 - [git](https://gist.github.com/derhuerst/1b15ff4652a867391f03#file-linux-md)
 - [make](https://www.cyberciti.biz/faq/debian-linux-install-gnu-gcc-compiler/)
-- [node.js + npm](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions) (use node 10 - we will drop support for node 8 soon)
-- python 2.7 (preinstalled on most systems, check with `python --version`)
+- [node.js + npm](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions) (min 10.15.3)
+- python 2.7 (pre-installed on most systems, check with `python --version`)
+- python 3.7 (easy to [install on ubuntu](https://pastebin.com/Nzn8mfnE), more difficult on other distributions)
 - killall (`sudo apt-get install psmisc`)
 
 ### Installing Go
@@ -87,7 +90,7 @@ You can start all components with
 xud-simnet-start
 ```
 
-Since `btcd` and `ltcd` need to sync the blocks of the XUD simnet when started for the first time, it could take some time until you see `Ready!`. As long as you see the process advancing in the terminal, be patient and keep the process running.
+Since `btcd`, `ltcd` and `geth` need to sync the blocks of the XUD simnet when started for the first time, it could take some time until you see `Ready!`. As long as you see the process advancing in the terminal, be patient and keep the process running.
 
 ### Stopping
 
@@ -95,13 +98,7 @@ Gracefully stop the environment with `xud-simnet-stop`.
 
 ### Payment Channels
 
-To setup payment channels run
-
-```
-xud-simnet-channels
-```
-
-Payment channels are used to instantly settle trades via cross chain atomic swaps with peers. It can take 10 minutes or more for your payment channels to be ready. The `xud-simnet` features one minute block times and we could speed this up arbitrarily, but later on mainnet this will involve an even more significant waiting time. We decided to keep it close to reality without being too annoyingly long.
+Payment channels are opened automatically and used to instantly settle trades via cross chain atomic swaps with peers. It can take 10 minutes or more for your payment channels to be ready.
 
 ### Final check
 
@@ -115,49 +112,63 @@ and you should see something similar to
 
 ```
 {
-  "version": "1.0.0-alpha.6",
-  "nodePubKey": "0361b8cb3dc599564f68ac651df4b002280bd8fa790ccc0aacc9113880e8b5e8b8",
+  "version": "1.0.0-alpha.11",
+  "nodePubKey": "02c516828e6ac1a2d03f971f4aca7b4e24634fe51a3d1b10a56e1d66f46311a81e",
   "urisList": [],
   "numPeers": 3,
-  "numPairs": 1,
+  "numPairs": 2,
   "orders": {
-    "peer": 1,
+    "peer": 10,
     "own": 0
   },
-  "lndbtc": {
-    "error": "",
-    "channels": {
-      "active": 1,
-      "inactive": 0,
-      "pending": 0
-    },
-    "chainsList": [
-      "bitcoin"
+  "lndMap": [
+    [
+      "BTC",
+      {
+        "error": "",
+        "channels": {
+          "active": 0,
+          "inactive": 0,
+          "pending": 0
+        },
+        "chainsList": [
+          "bitcoin"
+        ],
+        "blockheight": 265587,
+        "urisList": [],
+        "version": "0.5.0-beta commit=v0.4.2-beta-1254-g13afd0b4de30c2ddb752b0095fcda3e53c01fc7e",
+        "alias": "BTC@ubuntu"
+      }
     ],
-    "blockheight": 18797,
-    "urisList": [],
-    "version": "0.5.0-beta commit=v0.4.2-beta-1247-ge22ae9985b696924d5934004c269c930d3ccba43",
-    "alias": "BTC@exchange-install-test-machine"
-  },
-  "lndltc": {
+    [
+      "LTC",
+      {
+        "error": "",
+        "channels": {
+          "active": 1,
+          "inactive": 0,
+          "pending": 0
+        },
+        "chainsList": [
+          "litecoin"
+        ],
+        "blockheight": 478822,
+        "urisList": [],
+        "version": "0.5.0-beta commit=v0.4.2-beta-1254-g13afd0b4de30c2ddb752b0095fcda3e53c01fc7e",
+        "alias": "LTC@ubuntu"
+      }
+    ]
+  ],
+  "raiden": {
     "error": "",
-    "channels": {
-      "active": 1,
-      "inactive": 0,
-      "pending": 0
-    },
-    "chainsList": [
-      "litecoin"
-    ],
-    "blockheight": 22362,
-    "urisList": [],
-    "version": "0.5.0-beta commit=v0.4.2-beta-1247-ge22ae9985b696924d5934004c269c930d3ccba43",
-    "alias": "LTC@exchange-install-test-machine"
+    "address": "0xcefCdD31d2724Cf925d75ADF6C2a774c5EA450E7",
+    "channels": 0,
+    "version": ""
   }
 }
 ```
 
-with one active channel for both, `lndbtc` and `lndltc`. If so, you are finally ready to rumble. Let's do some trades!
+with one active channel for `lnd-btc`, `lnd-ltc` and `raiden`. If so, you are finally ready to rumble. Let's do some trades!
 
 ### Trading
 
