@@ -31,6 +31,15 @@ Default is `matching` mode, which means that `xud` acts as order book & matching
 * `SubscribeSwaps` informs about successful/failed swaps with other peers in an event stream and is to be used with `PlaceOrder`. Use this call to get real-time swap events from placed orders to track order executions, update your user's balances, and inform users when one of their orders was settled.
 * `ExecuteSwap` executes a swap for an match your internal matching engine found with a remote peer. This call requires `orderID`, `pairID` & `quantity`. You can continue using your internal `orderID`s, `xud` takes care of mapping such with `orderID`s in the Exchange Union network. This is a sync call, returning the final result of a swap. It might take several seconds for the swap to complete.
 
+### Hints
+* `xud` doesn't *forward* orders, it only sends to and receives from direct peers. Reason for this, among others, are manipulation and speed. A more scalable approach will be [introduced in a later stage](https://github.com/ExchangeUnion/Docs/blob/master/XU-TechnicalPaper.md#xus-dob-protocol-has-the-following-goals).
+* Restarting or stopping `xud` clears all orders. When `xud` boots up, it automatically reconnects to its peers and fetches all open orders.
+* `xud` relies on is it's own (local) view of orders. This is also how it determines if it is a maker or a taker when a match is found. If the peer order reached the order book first = maker, if the local order reached the order book first = taker. Due to network latency it now can happen that both parties determine to be maker (or taker). In this case, a swap won't be initiated.
+* To query existing orders one can use `ListOrders`, in addition to the `existing` flag for the `SubscribeAddedOrders` streaming call.
+* Peer discovery and auto-connecting to new peers is still experimental and only enabled gradually. In order to manually connect to a peer, use `connect [NodeURI]` where `NodeURI` is `pubkey@IP:Port`, e.g. `02b66438730d1fcdf4a4ae5d3d73e847a272f160fee2938e132b52cab0a0d9cfc6@xud1.test.exchangeunion.com:8885`.
+* gRPC is locally exposed on port 8886 by default. If you encounter a `grpc_status 14` error, check your SSL setup.
+* `nomatching` mode introduces the problem of peer orders racing against local orders since most exchange's matching engines don't support the necessary `hold` mechanism. Several approaches are currently being evaluated and tested, follow the status [here](https://github.com/ExchangeUnion/xud/issues/587).
+
 ### Help us to improve!
 
 `xud` is in alpha stage, as well as this guide. Please help us to improve by opening issues (or even better PRs) for [xud](https://github.com/ExchangeUnion/xud/issues), the [simnet](https://github.com/ExchangeUnion/xud-simnet/issues) and this [wiki](https://github.com/ExchangeUnion/xud-wiki/issues).
