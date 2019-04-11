@@ -1,0 +1,7 @@
+- [ ] Make sure to have GPG keys configured in github and `npm config set sign-git-tag true`
+- [ ] Upgrade version  via npm (`git checkout master`, `git pull`, `npm install`, `git reset --hard origin/master`, `npm version 1.0.0-alpha.X` (substitute X with the version number), `git push --tags`
+- [ ] Publish on npm (`npm publish`)
+- [ ] Tag release (go to github, releases, draft a new release, leave title empty, type in the version number for the tag (`v1.0.0-alpha.X`) which should show "Existing tag" and copy/paste the most recent generated changelog (in `xud` folder) into the description. run `npm pack` and then upload the packed .tgz file to the github release.
+- [ ] npm run typedoc
+- [ ] npm run slate
+- [ ] WeChat, Blockfolio Signal, Telegram, Tweet
